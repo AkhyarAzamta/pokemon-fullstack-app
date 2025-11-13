@@ -3,7 +3,7 @@ import App from './App.vue'
 import router from './router'
 import Toast, { type PluginOptions } from 'vue-toastification'
 import 'vue-toastification/dist/index.css'
-import './assets/main.css' // Import file CSS
+import './assets/main.css'
 
 const app = createApp(App)
 
