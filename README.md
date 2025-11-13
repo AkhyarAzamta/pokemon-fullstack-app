@@ -32,6 +32,7 @@
 - Frontend: 
 ``` 
 https://pokemon-app.akhyarazamta.com
+[postman_collection](./postman_collection.json)
 https://pokemon-app-akhyarazamta.netlify.app
 ```
 - Backend API: 
