@@ -1,5 +1,16 @@
 # Pokemon Fullstack App
-🎯 Evaluation Checklist
+
+## Frontend Preview
+![Home](frontend/public/home.png)
+![Favorites](frontend/public/favorites.png)
+![Abilities](frontend/public/abilities.png)
+![Coin](frontend/public/coin.png)
+
+## Backend Preview
+![Home](backend/public/openapi.png)
+
+
+# 🎯 Evaluation Checklist
 
 ### ✅ Completed Requirements
 - **Correctness of the solution**: ✅ Complete – All endpoints working as specified with proper error handling
@@ -12,26 +23,38 @@
 ### ✅ Bonus Features Completed
 - **MongoDB Integration**: ⌛ Pending
 - **Laravel Vapor Deployment**: ⌛ Pending
-- **Netlify Deployment**: ⌛ Pending
+- **Netlify Deployment**: ✅ Complete
 - **Coin Counter Task**: ✅ Complete
 - **API Caching**: ✅ Complete
 
 🚀 Live Demos
 
-- Frontend: https://your-netlify-app.netlify.app
-- Backend API: https://your-laravel-vapor-app.vapor.app
-- API Docs: https://your-netlify-app.netlify.app/api-docs
+- Frontend: 
+``` 
+https://pokemon-app.akhyarazamta.com
+https://pokemon-app-akhyarazamta.netlify.app
+```
+- Backend API: 
+```
+https://api-pokemon-app.akhyarazamta.com/api
+```
+- API Docs: 
+```
+https://api.pokemon-app.akhyarazamta.com
+```
 
 🛠 Technology Stack
 
 **Backend:** Laravel 12, MySQL, PHPUnit
-**Frontend:** Vue.js 3, Axios
-**DevOps:** Git, Postman
 
-🏗 Setup Instructions
+**Frontend:** Vue.js 3, Axios
+
+**DevOps:** Docker, Git, Postman
+
+# 🏗 Setup Instructions
 
 ### Prerequisites
-- PHP 8.3+, Composer, Node.js 18+, MongoDB, Redis
+- PHP 8.3+, Composer, Node.js 18+, MySQL
 
 ### Backend Setup
 ```bash
@@ -50,7 +73,15 @@ npm install
 npm run dev
 ```
 
-📡 API Endpoints
+### Docker Setup
+```
+docker compose up --build
+```
+
+### Postman Colllection
+Import this Colllection: [postman_collection](./postman_collection.json)
+
+# 📡 API Endpoints
 
 ### Pokémon Management
 - GET /api/pokemon – List all Pokémon (paginated)
@@ -67,7 +98,7 @@ npm run dev
 - GET /api/test – API health check
 - POST /api/coins/count – Coin counting (Bonus)
 
-🧪 Testing
+### 🚀 Testing
 
 #### Backend Tests
 ```bash
@@ -79,20 +110,6 @@ php artisan test --testsuite=Feature
 ```bash
 npm run test:unit
 npm run test:e2e
-```
-
-🚀 Deployment
-
-### Backend (Laravel Vapor)
-```bash
-composer global require laravel/vapor-cli
-vapor deploy production
-```
-
-### Frontend (Netlify)
-```bash
-npm run build
-netlify deploy --prod --dir=dist
 ```
 
 📄 License
