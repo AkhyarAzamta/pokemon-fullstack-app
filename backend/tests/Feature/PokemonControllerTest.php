@@ -87,26 +87,23 @@ class PokemonControllerTest extends TestCase
             ], 200)
         ]);
 
-        // Add to favorite
         $response = $this->postJson('/api/pokemon/1/favorite');
         $response->assertStatus(200)
             ->assertJson([
-                'message' => 'Pokemon added to favorites',
+                'message' => 'Pokémon added to favorites', // PERBAIKI: tambahkan aksen é
                 'is_favorite' => true
             ]);
 
-        // Remove from favorite
         $response = $this->postJson('/api/pokemon/1/favorite');
         $response->assertStatus(200)
             ->assertJson([
-                'message' => 'Pokemon removed from favorites',
+                'message' => 'Pokémon removed from favorites', // PERBAIKI: tambahkan aksen é
                 'is_favorite' => false
             ]);
     }
 
     public function test_can_get_favorites_list()
     {
-        // Gunakan create langsung instead of factory()
         Pokemon::create([
             'pokeapi_id' => 25,
             'name' => 'pikachu',
@@ -176,7 +173,6 @@ class PokemonControllerTest extends TestCase
 
     public function test_can_get_pokemon_by_ability()
     {
-        // Pertama, test tanpa data
         $response = $this->getJson('/api/favorites/ability/static');
         $response->assertStatus(200)
             ->assertJson([
@@ -184,7 +180,6 @@ class PokemonControllerTest extends TestCase
                 'count' => 0
             ]);
 
-        // Kemudian test dengan data sederhana
         $pokemon = Pokemon::create([
             'pokeapi_id' => 25,
             'name' => 'pikachu-test',
@@ -199,7 +194,6 @@ class PokemonControllerTest extends TestCase
 
         $response = $this->getJson('/api/favorites/ability/static');
 
-        // Cek struktur dulu, baru konten
         $response->assertStatus(200)
             ->assertJsonStructure([
                 'data',
@@ -208,7 +202,6 @@ class PokemonControllerTest extends TestCase
             ])
             ->assertJsonPath('ability', 'static');
 
-        // Jika count > 0, baru test data content
         $responseData = $response->json();
         if ($responseData['count'] > 0) {
             $response->assertJsonPath('data.0.name', 'pikachu-test');

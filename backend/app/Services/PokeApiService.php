@@ -9,15 +9,11 @@ class PokeApiService
 {
     protected string $baseUrl = 'https://pokeapi.co/api/v2';
 
-    /**
-     * Ambil daftar Pokémon (dengan sprite + pagination)
-     */
     public function getPokemons(int $page = 1, int $limit = 20): ?array
     {
         $offset = ($page - 1) * $limit;
         $cacheKey = "pokemon_list_page_{$page}_{$limit}";
 
-        // Jika ada cache, kembalikan
         if (Cache::has($cacheKey)) {
             return Cache::get($cacheKey);
         }
@@ -33,7 +29,6 @@ class PokeApiService
 
         $data = $response->json();
 
-        // Atur urutan id, name, sprite, url
         $results = collect($data['results'] ?? [])->map(function ($item) {
             preg_match('/\/pokemon\/(\d+)\//', $item['url'], $matches);
             $id = $matches[1] ?? null;
@@ -50,15 +45,11 @@ class PokeApiService
 
         $data['results'] = $results;
 
-        // Simpan ke cache lalu kembalikan
         Cache::put($cacheKey, $data, 3600);
 
         return $data;
     }
 
-    /**
-     * Ambil detail Pokémon (dengan sprite)
-     */
     public function getPokemonDetail($id): ?array
     {
         $cacheKey = 'pokemon_detail_' . $id;
@@ -76,7 +67,6 @@ class PokeApiService
 
         $data = $response->json();
 
-        // Pastikan sprite ada
         $data['sprite'] = $data['sprites']['front_default'] ?? null;
 
         Cache::put($cacheKey, $data, 3600);

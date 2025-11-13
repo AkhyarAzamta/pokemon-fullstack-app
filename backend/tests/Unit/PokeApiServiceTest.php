@@ -78,15 +78,12 @@ class PokeApiServiceTest extends TestCase
             ], 200)
         ]);
 
-        // First call - should call API
         $result1 = $this->pokeApiService->getPokemons(1, 1);
         
-        // Second call - should use cache
         $result2 = $this->pokeApiService->getPokemons(1, 1);
 
         $this->assertEquals($result1, $result2);
         
-        // Verify API was called only once
         Http::assertSentCount(1);
     }
 }

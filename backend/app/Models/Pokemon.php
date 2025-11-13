@@ -33,9 +33,6 @@ class Pokemon extends Model
         'weight' => 'integer'
     ];
 
-    /**
-     * Accessor untuk memastikan abilities selalu array
-     */
     public function getAbilitiesAttribute($value)
     {
         if (is_array($value)) {
@@ -48,13 +45,10 @@ class Pokemon extends Model
         
         return [];
     }
-    /**
-     * Scope untuk filter by ability
-     */
+
     public function scopeWithAbility(Builder $query, $abilityName)
     {
         return $query->where(function ($q) use ($abilityName) {
-            // Untuk MySQL dengan JSON support
             $q->whereRaw(
                 'JSON_CONTAINS(abilities, ?, "$")',
                 [json_encode(['name' => $abilityName])]

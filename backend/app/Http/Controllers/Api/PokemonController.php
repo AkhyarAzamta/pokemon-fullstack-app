@@ -19,10 +19,6 @@ class PokemonController extends Controller
         $this->pokeApiService = $pokeApiService;
     }
 
-    /**
-     * GET /api/pokemon
-     * Daftar Pokemon dengan pagination + image (sprite)
-     */
     public function index(Request $request)
     {
         try {
@@ -72,10 +68,6 @@ class PokemonController extends Controller
         }
     }
 
-    /**
-     * GET /api/pokemon/{id}
-     * Detail Pokemon berdasarkan ID atau nama
-     */
     public function show($id)
     {
         try {
@@ -103,10 +95,6 @@ class PokemonController extends Controller
         }
     }
 
-    /**
-     * POST /api/pokemon/{id}/favorite
-     * Tambah / hapus Pokemon dari daftar favorit
-     */
     public function toggleFavorite(Request $request, $id)
     {
         try {
@@ -157,10 +145,6 @@ class PokemonController extends Controller
         }
     }
 
-    /**
-     * GET /api/favorites
-     * Tampilkan semua Pokémon favorit
-     */
     public function favorites()
     {
         try {
@@ -175,10 +159,6 @@ class PokemonController extends Controller
         }
     }
 
-    /**
-     * GET /api/favorites/search?q=bulbasaur
-     * Cari Pokémon favorit berdasarkan nama
-     */
     public function searchFavorites(Request $request)
     {
         try {
@@ -219,10 +199,6 @@ class PokemonController extends Controller
         }
     }
 
-    /**
-     * GET /api/favorites/abilities
-     * Ambil semua ability unik dari Pokémon favorit
-     */
     public function favoriteAbilities()
     {
         try {
@@ -253,14 +229,9 @@ class PokemonController extends Controller
         }
     }
 
-    /**
-     * GET /api/favorites/ability/{ability}
-     * Tampilkan Pokémon favorit berdasarkan ability tertentu
-     */
     public function byAbility(Request $request, $ability)
     {
         try {
-            // Validasi parameter ability
             $validator = Validator::make(['ability' => $ability], [
                 'ability' => 'required|string|min:1|max:50|regex:/^[a-zA-Z0-9\-]+$/'
             ], [
@@ -285,7 +256,6 @@ class PokemonController extends Controller
                 }
 
                 foreach ($pokemon->abilities as $data) {
-                    // Handle both array structures from PokeAPI and our storage
                     $name = $data['ability']['name'] ?? $data['name'] ?? null;
                     if ($name === $ability) {
                         return true;

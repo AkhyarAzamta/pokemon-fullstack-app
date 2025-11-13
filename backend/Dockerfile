@@ -19,12 +19,8 @@ WORKDIR /var/www/html
 COPY --from=builder /app .
 
 # Copy Nginx and Supervisor configs
-#COPY ./docker/nginx.conf /etc/nginx/nginx.conf
-#COPY ./docker/supervisord.conf /etc/supervisord.conf
-
-# Railway Deployment
-COPY docker/nginx.conf /etc/nginx/nginx.conf
-COPY docker/supervisord.conf /etc/supervisord.conf
+COPY ./docker/nginx.conf /etc/nginx/nginx.conf
+COPY ./docker/supervisord.conf /etc/supervisord.conf
 
 # Set permissions
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache

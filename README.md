@@ -6,8 +6,13 @@
 ![Abilities](frontend/public/abilities.png)
 ![Coin](frontend/public/coin.png)
 
+##
+
 ## Backend Preview
 ![Home](backend/public/openapi.png)
+![Postman1](backend/public/postman1.png)
+![Postman2](backend/public/postman2.png)
+![Postman3](backend/public/postman3.png)
 
 
 # 🎯 Evaluation Checklist
@@ -32,12 +37,11 @@
 - Frontend: 
 ``` 
 https://pokemon-app.akhyarazamta.com
-[postman_collection](./postman_collection.json)
 https://pokemon-app-akhyarazamta.netlify.app
 ```
 - Backend API: 
 ```
-https://api-pokemon-app.akhyarazamta.com/api
+https://api-pokemon-app.akhyarazamta.com
 ```
 - API Docs: 
 ```
