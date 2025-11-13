@@ -1,0 +1,32 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: pokemon_backend
+    ports:
+      - "8000:8080"
+    env_file:
+      - ./backend/.env
+    volumes:
+      - ./backend:/var/www/html
+    restart: unless-stopped
+    networks:
+      - pokemon-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: pokemon_frontend
+    ports:
+      - "3000:80"
+    restart: unless-stopped
+    depends_on:
+      - backend
+    networks:
+      - pokemon-network
+
+networks:
+  pokemon-network:
+    driver: bridge
