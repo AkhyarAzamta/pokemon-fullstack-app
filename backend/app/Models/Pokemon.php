@@ -2,15 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
+use MongoDB\Laravel\Eloquent\Model;
 
 class Pokemon extends Model
 {
-    use HasFactory;
-
-    protected $table = 'pokemons';
+    protected $connection = 'mongodb';
+    protected $collection = 'pokemons';
     
     protected $fillable = [
         'pokeapi_id',
@@ -30,29 +27,10 @@ class Pokemon extends Model
         'stats' => 'array',
         'is_favorite' => 'boolean',
         'height' => 'integer',
-        'weight' => 'integer'
+        'weight' => 'integer',
+        'pokeapi_id' => 'integer'
     ];
 
-    public function getAbilitiesAttribute($value)
-    {
-        if (is_array($value)) {
-            return $value;
-        }
-        
-        if (is_string($value)) {
-            return json_decode($value, true) ?? [];
-        }
-        
-        return [];
-    }
-
-    public function scopeWithAbility(Builder $query, $abilityName)
-    {
-        return $query->where(function ($q) use ($abilityName) {
-            $q->whereRaw(
-                'JSON_CONTAINS(abilities, ?, "$")',
-                [json_encode(['name' => $abilityName])]
-            );
-        });
-    }
+    // Timestamps otomatis di MongoDB
+    public $timestamps = true;
 }

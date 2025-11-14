@@ -81,7 +81,8 @@ class PokemonController extends Controller
                 return response()->json(['error' => 'Pokémon not found'], 404);
             }
 
-            $favorite = Pokemon::where('pokeapi_id', $pokemon['id'])->first();
+            // Cari di MongoDB berdasarkan pokeapi_id
+            $favorite = Pokemon::where('pokeapi_id', (int) $pokemon['id'])->first();
             $pokemon['is_favorite'] = (bool) $favorite;
 
             return response()->json(['data' => $pokemon]);
@@ -108,7 +109,8 @@ class PokemonController extends Controller
                 return response()->json(['error' => 'Pokémon not found'], 404);
             }
 
-            $existing = Pokemon::where('pokeapi_id', $pokemonDetail['id'])->first();
+            // Cari berdasarkan pokeapi_id di MongoDB
+            $existing = Pokemon::where('pokeapi_id', (int) $pokemonDetail['id'])->first();
 
             if ($existing) {
                 $existing->delete();
@@ -119,7 +121,7 @@ class PokemonController extends Controller
             }
 
             $pokemon = Pokemon::create([
-                'pokeapi_id' => $pokemonDetail['id'],
+                'pokeapi_id' => (int) $pokemonDetail['id'],
                 'name' => $pokemonDetail['name'],
                 'types' => $pokemonDetail['types'],
                 'abilities' => $pokemonDetail['abilities'],
@@ -178,11 +180,11 @@ class PokemonController extends Controller
 
             $query = $request->get('q', '');
             
-            // Jika query kosong, kembalikan semua favorites
             if (empty(trim($query))) {
                 $favorites = Pokemon::all();
             } else {
-                $favorites = Pokemon::where('name', 'like', "%{$query}%")->get();
+                // Menggunakan regex untuk case-insensitive search di MongoDB
+                $favorites = Pokemon::where('name', 'regex', "/$query/i")->get();
             }
 
             return response()->json([
@@ -208,7 +210,6 @@ class PokemonController extends Controller
             foreach ($favorites as $pokemon) {
                 if (!empty($pokemon->abilities) && is_array($pokemon->abilities)) {
                     foreach ($pokemon->abilities as $ability) {
-                        // Handle both array structures
                         $name = $ability['ability']['name'] ?? $ability['name'] ?? null;
                         if ($name && is_string($name) && !in_array($name, $abilities)) {
                             $abilities[] = $name;
@@ -249,25 +250,17 @@ class PokemonController extends Controller
                 ], 400);
             }
 
-            $favorites = Pokemon::all();
-            $filtered = $favorites->filter(function ($pokemon) use ($ability) {
-                if (empty($pokemon->abilities) || !is_array($pokemon->abilities)) {
-                    return false;
-                }
-
-                foreach ($pokemon->abilities as $data) {
-                    $name = $data['ability']['name'] ?? $data['name'] ?? null;
-                    if ($name === $ability) {
-                        return true;
-                    }
-                }
-                return false;
-            });
+            // Menggunakan elemMatch untuk mencari dalam array di MongoDB
+            $favorites = Pokemon::where('abilities', 'elemMatch', [
+                'ability.name' => $ability
+            ])->orWhere('abilities', 'elemMatch', [
+                'name' => $ability
+            ])->get();
 
             return response()->json([
-                'data' => PokemonResource::collection($filtered),
+                'data' => PokemonResource::collection($favorites),
                 'ability' => $ability,
-                'count' => $filtered->count()
+                'count' => $favorites->count()
             ]);
         } catch (\Exception $e) {
             Log::error('By ability error', [
