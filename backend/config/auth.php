@@ -64,7 +64,8 @@ return [
             'driver' => 'eloquent',
             'model' => env('AUTH_MODEL', App\Models\User::class),
         ],
-
+        // If you need to register a service provider (such as a MongoDB provider), add it to the
+        // 'providers' array in config/app.php instead of here.
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',
