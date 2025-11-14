@@ -1,14 +1,15 @@
 # Pokemon Fullstack App
 
-## Frontend Preview
+# Frontend Preview
 ![Home](frontend/public/home.png)
 ![Favorites](frontend/public/favorites.png)
 ![Abilities](frontend/public/abilities.png)
 ![Coin](frontend/public/coin.png)
 
 ##
+##
 
-## Backend Preview
+# Backend Preview
 ![Home](backend/public/openapi.png)
 ![Postman1](backend/public/postman1.png)
 ![Postman2](backend/public/postman2.png)
@@ -27,11 +28,15 @@
 - **Unit testing**: ✅ Complete – Comprehensive test suite covering controllers, models, and services
 
 ### ✅ Bonus Features Completed
-- **MongoDB Integration**: ⌛ Pending
+- **MongoDB Integration**: ✅ Complete
 - **Laravel Vapor Deployment**: ⌛ Pending
 - **Netlify Deployment**: ✅ Complete
 - **Coin Counter Task**: ✅ Complete
 - **API Caching**: ✅ Complete
+
+## 🗐 Postman Colllection
+Import this Colllection: [Postman Collection](./postman_collection.json)
+
 
 🚀 Live Demos
 
@@ -51,7 +56,7 @@ https://api.pokemon-app.akhyarazamta.com
 
 🛠 Technology Stack
 
-**Backend:** Laravel 12, MySQL, PHPUnit
+**Backend:** Laravel 12, MongoDB, PHPUnit
 
 **Frontend:** Vue.js 3, Axios
 
@@ -60,7 +65,7 @@ https://api.pokemon-app.akhyarazamta.com
 # 🏗 Setup Instructions
 
 ### Prerequisites
-- PHP 8.3+, Composer, Node.js 18+, MySQL
+- PHP 8.3+, Composer, Node.js 18+, MongoDB
 
 ### Backend Setup
 ```bash
@@ -84,11 +89,8 @@ npm run dev
 docker compose up --build
 ```
 
-### Postman Colllection
-Import this Colllection: [postman_collection](./postman_collection.json)
-
 # 📡 API Endpoints
-
+API docs: [Open API](./openapi-3.0.yml)
 ### Pokémon Management
 - GET /api/pokemon – List all Pokémon (paginated)
 - GET /api/pokemon/{id} – Get Pokémon details
