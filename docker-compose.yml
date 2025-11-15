@@ -1,4 +1,18 @@
 services:
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_DATABASE: pokemon_db
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - pokemon-network
+
   backend:
     build:
       context: ./backend
@@ -8,11 +22,14 @@ services:
       - "8000:8080"
     env_file:
       - ./backend/.env
-    volumes:
-      - ./backend:/var/www/html
     restart: unless-stopped
     networks:
       - pokemon-network
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+    depends_on:
+      - mongodb
 
   frontend:
     build:
@@ -30,3 +47,6 @@ services:
 networks:
   pokemon-network:
     driver: bridge
+
+volumes:
+  mongodb_data:

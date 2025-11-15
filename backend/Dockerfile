@@ -1,29 +1,44 @@
-# ---- Build stage ----
-FROM composer:2 AS builder
-WORKDIR /app
-COPY . .
-RUN composer install --no-dev --optimize-autoloader
-RUN php artisan config:cache && php artisan route:cache && php artisan view:cache
-
-# ---- Production stage ----
 FROM php:8.3-fpm-alpine
 
 # Install system dependencies
-RUN apk add --no-cache nginx supervisor curl git zip unzip libpng-dev oniguruma-dev libxml2-dev bash
+RUN apk update && apk add --no-cache \
+    nginx supervisor curl git unzip \
+    oniguruma-dev libxml2-dev openssl-dev \
+    autoconf g++ make
+
+# Install MongoDB extension
+RUN pecl install mongodb && docker-php-ext-enable mongodb
 
 # Install PHP extensions
-RUN docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd
+RUN docker-php-ext-install pdo pdo_mysql mbstring
 
-# Copy Laravel app
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
 WORKDIR /var/www/html
-COPY --from=builder /app .
+COPY . .
 
-# Copy Nginx and Supervisor configs
+# Install dependencies dengan ignore platform reqs
+RUN composer install --no-dev --optimize-autoloader --ignore-platform-reqs
+
+# Setup storage
+RUN mkdir -p storage/framework/views storage/framework/cache storage/framework/sessions storage/logs bootstrap/cache && \
+    chown -R www-data:www-data storage bootstrap/cache && \
+    chmod -R 775 storage bootstrap/cache
+
+# Clear cache
+RUN php artisan config:clear && \
+    php artisan cache:clear && \
+    php artisan view:clear
+
 COPY ./docker/nginx.conf /etc/nginx/nginx.conf
-COPY ./docker/supervisord.conf /etc/supervisord.conf
 
-# Set permissions
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+# Startup script
+RUN echo '#!/bin/sh' > /start.sh && \
+    echo 'php artisan config:cache' >> /start.sh && \
+    echo 'php artisan route:cache' >> /start.sh && \
+    echo 'php-fpm -D' >> /start.sh && \
+    echo 'nginx -g "daemon off;"' >> /start.sh && \
+    chmod +x /start.sh
 
 EXPOSE 8080
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
+CMD ["/start.sh"]
