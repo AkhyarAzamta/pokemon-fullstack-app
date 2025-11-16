@@ -1,4 +1,18 @@
 services:
+  app:
+    build:
+      context: .
+    container_name: pokemon_app
+    ports:
+      - "8000:8080"  # Backend
+      - "3000:80"    # Frontend
+    env_file:
+      - backend/.env
+    networks:
+      - pokemon-network
+    depends_on:
+      - mongodb
+
   mongodb:
     image: mongo:latest
     container_name: mongodb
@@ -8,41 +22,10 @@ services:
       MONGO_INITDB_DATABASE: pokemon_db
     ports:
       - "27017:27017"
+    networks:
+      - pokemon-network
     volumes:
       - mongodb_data:/data/db
-    networks:
-      - pokemon-network
-
-  backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    container_name: pokemon_backend
-    ports:
-      - "8000:8080"
-    env_file:
-      - ./backend/.env
-    restart: unless-stopped
-    networks:
-      - pokemon-network
-    environment:
-      - APP_ENV=local
-      - APP_DEBUG=true
-    depends_on:
-      - mongodb
-
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    container_name: pokemon_frontend
-    ports:
-      - "3000:80"
-    restart: unless-stopped
-    depends_on:
-      - backend
-    networks:
-      - pokemon-network
 
 networks:
   pokemon-network:

@@ -84,9 +84,53 @@ npm install
 npm run dev
 ```
 
-### Docker Setup
+## 🐳 Docker Setup 
+
+### Quick Start (Using Pre-built Image)
+Menjalankan aplikasi fullstack (Frontend + Backend + MongoDB) dengan image dari Docker Hub:
+
 ```
-docker compose up --build
+# Pull image terbaru dari Docker Hub
+docker pull akhyarazamta/pokemon-app:latest
+```
+
+### Akses
+
+**Frontend**: http://localhost:3000
+
+**Backend API**: http://localhost:8000
+
+**MongoDB**: http://localhost:27017
+
+**API Documentation**: http://localhost:8000
+
+### Development (Build from Source)
+Jika ingin build dari source code:
+```
+# Build dan jalankan dari source
+docker compose up --build -d
+```
+
+### Perintah Docker Lainnya:
+```
+# Melihat status containers
+docker compose ps
+
+# Melihat logs
+docker compose logs -f
+
+# Stop services
+docker compose down
+
+# Stop dan hapus data
+docker compose down -v
+
+# Masuk ke container app
+docker compose exec app sh
+
+# Pull update terbaru
+docker compose pull
+docker compose up -d
 ```
 
 # 📡 API Endpoints
